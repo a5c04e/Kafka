@@ -8,11 +8,10 @@ public class CustomProducer {
         Properties props = new Properties();
         Producer<String, String> producer = new KafkaProducer<> (props);
         for(int i=0;i<100;i++) {
-            producer.send(new ProducerRecord<String, String>(
-
+            producer.send(new ProducerRecord<String, String>("first",
+                    Integer.toString(i), Integer.toString(i)
                     )
             );
-
         }
         producer.close();
     }
