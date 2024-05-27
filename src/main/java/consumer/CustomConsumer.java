@@ -10,8 +10,8 @@ public class CustomConsumer {
         props.put("bootstrap.servers", "192.168.10.102:9092");
         //设置消费者组test
         props.put("group.id", "test");
-        //开启自动提交
-        props.put("enable.auto.commit", "true");
+        //关闭自动提交
+        props.put("enable.auto.commit", "false");
         //设置自动提交时间间隔为1秒
         props.put("auto.commit.interval.ms", "1000");
         props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
@@ -21,10 +21,13 @@ public class CustomConsumer {
         //消费者订阅first主题
         consumer.subscribe(Arrays.asList("first"));
         while (true) {
+            //消费者拉取数据
             ConsumerRecords<String,  String>  records=consumer.poll(100);
             for (ConsumerRecord<String, String> record : records) {
                 System.out.printf("offset = %d, key = %s, value = %s%n", record.offset(), record.key(), record.value());
             }
+            //同步提交,当前线程会阻塞直到offset提交成功
+            consumer.commitSync();
         }
     }
 }
